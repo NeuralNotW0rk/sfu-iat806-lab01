@@ -9,7 +9,7 @@ async function setup() {
 
   // The turtle's face. Drop any image into this folder and point at it here —
   // it gets scaled and cropped into a circle, so anything roughly square works.
-  const face = await loadImage("turtle.jpg");
+  const face = await loadImage("turtle.png");
 
   // Make a turtle near the bottom left, facing up.
   turtle = new KardunTurtle(200, 420, face);
@@ -21,12 +21,58 @@ async function setup() {
 // YOUR INSTRUCTIONS GO HERE
 // ---------------------------------------------------------------
 
+let angle = 60;
+
+function A(w, d) {
+  if (d == 0) {
+    turtle.forward(w);
+    return;
+  }
+  w /= 2;
+  d--;
+
+  // A -> B-A-B
+  B(w, d);
+  turtle.right(angle);
+  A(w, d);
+  turtle.right(angle);
+  B(w, d);
+}
+
+function B(w, d) {
+  if (d == 0) {
+    turtle.forward(w);
+    return;
+  }
+  w /= 2;
+  d--;
+
+  // B -> A+B+A
+  A(w, d);
+  turtle.left(angle);
+  B(w, d);
+  turtle.left(angle);
+  A(w, d);
+}
+
+function sierpinsky(width, depth) {
+  A(width, depth);
+}
+
 function giveInstructions() {
   turtle.penColor("#ff7a3c");
-  turtle.penWidth(4);
+  turtle.penWidth(1);
 
   // Press a face onto the canvas, so we can see where we started.
   turtle.stamp();
+
+  let width = 400
+  let depth = 8;
+
+  turtle.setSpeed(2 ** (depth));
+  turtle.right(90);
+  sierpinsky(width, depth);
+
 }
 
 function draw() {
